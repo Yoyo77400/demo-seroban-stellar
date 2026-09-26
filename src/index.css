@@ -1,0 +1,235 @@
+/* HackMeridian 2026 palette (EXT - Your Way Activation Playbook §02) */
+:root {
+  --gold: #fdda24;
+  --black: #000000;
+  --white: #ffffff;
+  --gray: #b2b2b2;
+  --surface: #111111;
+  --border: #2a2a2a;
+  --error: #ff7a6b;
+  --ok: #7ee2a8;
+
+  color-scheme: dark;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  color: var(--white);
+  background: var(--black);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--black);
+}
+
+h1,
+h2 {
+  line-height: 1.15;
+  margin: 0 0 0.5rem;
+}
+
+a {
+  color: var(--gold);
+}
+
+code {
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 0.85em;
+  color: var(--gray);
+}
+
+.muted {
+  color: var(--gray);
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+}
+
+/* Check-in page */
+.layout {
+  display: grid;
+  gap: 1rem;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+@media (min-width: 800px) {
+  .layout {
+    grid-template-columns: 1.1fr 1fr;
+    align-items: start;
+  }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+form {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+label {
+  font-weight: 600;
+}
+
+input {
+  font: inherit;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--black);
+  color: var(--white);
+}
+
+input:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.primary {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--gold);
+  color: var(--black);
+  font-weight: 700;
+}
+
+.link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.wallet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.done {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.status {
+  margin: 1rem 0 0;
+}
+
+.status.error {
+  color: var(--error);
+}
+
+.status.ok {
+  color: var(--ok);
+}
+
+.count {
+  color: var(--gold);
+}
+
+.attendees {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.attendees li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.attendees li.me .name {
+  color: var(--gold);
+}
+
+.name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.footnote {
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+
+/* Projector page */
+.screen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  min-height: 100vh;
+  padding: 3rem;
+  align-items: center;
+}
+
+.screen-qr h1 {
+  font-size: 2.5rem;
+  max-width: 16ch;
+}
+
+.qr {
+  display: inline-block;
+  margin: 1.5rem 0 1rem;
+  padding: 1rem;
+  background: var(--white);
+  border-radius: 16px;
+}
+
+.url {
+  margin: 0;
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--gold);
+  overflow-wrap: anywhere;
+}
+
+.big-count {
+  margin: 0;
+  font-size: 8rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--gold);
+}
+
+.screen-list .attendees {
+  font-size: 1.4rem;
+  margin-top: 1.5rem;
+}
