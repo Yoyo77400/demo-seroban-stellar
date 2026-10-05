@@ -9,3 +9,5 @@ export const EXPLORER_URL = "https://stellar.expert/explorer/testnet";
 
 export const ATTENDEES_POLL_INTERVAL_MS = 5000;
 export const NAME_MAX_LENGTH = 32;
+export const TX_TIMEOUT_SECONDS = 60;
+export const DEFAULT_SEND_AMOUNT = "1";

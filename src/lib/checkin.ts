@@ -8,8 +8,12 @@ export const CONTRACT_ERRORS: Record<number, string> = {
 const CONTRACT_ERROR_PATTERN = /Error\(Contract, #(\d+)\)/;
 const ACCOUNT_NOT_FOUND_PATTERN = /account not found|does not exist/i;
 const USER_REJECTED_PATTERN = /reject|declin|cancel/i;
+const INSUFFICIENT_BALANCE_PATTERN = /underfunded|insufficient_balance/i;
+/** XLM has 7 decimal places (1 stroop = 0.0000001 XLM). */
+const AMOUNT_PATTERN = /^\d+(\.\d{1,7})?$/;
 
 export type NameValidation = { ok: true; name: string } | { ok: false; reason: string };
+export type AmountValidation = { ok: true; amount: string } | { ok: false; reason: string };
 
 /**
  * Normalizes and validates an attendee name before it is sent on-chain.
@@ -23,6 +27,19 @@ export function validateName(raw: string): NameValidation {
     return { ok: false, reason: `${NAME_MAX_LENGTH} caractères maximum.` };
   }
   return { ok: true, name };
+}
+
+/**
+ * Normalizes and validates an XLM amount typed by an attendee. Accepts a decimal comma.
+ *
+ * @example validateAmount(" 1,5 ") // { ok: true, amount: "1.5" }
+ */
+export function validateAmount(raw: string): AmountValidation {
+  const amount = raw.trim().replace(",", ".");
+  if (!AMOUNT_PATTERN.test(amount) || Number(amount) === 0) {
+    return { ok: false, reason: "Indique un montant positif, 7 décimales maximum." };
+  }
+  return { ok: true, amount };
 }
 
 /**
@@ -41,6 +58,7 @@ export function describeError(error: unknown): string {
     return "Ton compte testnet n'existe pas encore : clique sur « Obtenir des XLM de test ».";
   }
   if (USER_REJECTED_PATTERN.test(message)) return "Signature annulée dans le wallet.";
+  if (INSUFFICIENT_BALANCE_PATTERN.test(message)) return "Solde insuffisant pour cet envoi.";
   return "Une erreur est survenue. Réessaie dans quelques secondes.";
 }
 

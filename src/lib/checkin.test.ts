@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { NAME_MAX_LENGTH } from "../config";
-import { describeError, shortenAddress, validateName } from "./checkin";
+import { describeError, shortenAddress, validateAmount, validateName } from "./checkin";
 
 describe("validateName", () => {
   it("trims and collapses whitespace", () => {
@@ -17,6 +17,26 @@ describe("validateName", () => {
 
   it("accepts a name at the limit", () => {
     expect(validateName("a".repeat(NAME_MAX_LENGTH)).ok).toBe(true);
+  });
+});
+
+describe("validateAmount", () => {
+  it("trims and accepts a decimal comma", () => {
+    expect(validateAmount(" 1,5 ")).toEqual({ ok: true, amount: "1.5" });
+  });
+
+  it("accepts seven decimal places", () => {
+    expect(validateAmount("0.0000001").ok).toBe(true);
+  });
+
+  it("rejects more than seven decimal places", () => {
+    expect(validateAmount("0.00000001").ok).toBe(false);
+  });
+
+  it("rejects zero, negative and non-numeric amounts", () => {
+    expect(validateAmount("0").ok).toBe(false);
+    expect(validateAmount("-1").ok).toBe(false);
+    expect(validateAmount("abc").ok).toBe(false);
   });
 });
 
@@ -42,6 +62,12 @@ describe("describeError", () => {
   it("reads the message of a wallets kit error object", () => {
     expect(describeError({ code: -3, message: "User declined access" })).toBe(
       "Signature annulée dans le wallet.",
+    );
+  });
+
+  it("detects an underfunded payment", () => {
+    expect(describeError(new Error('Payment failed: {"tx_failed":[{"op_inner":{"payment":"underfunded"}}]}'))).toBe(
+      "Solde insuffisant pour cet envoi.",
     );
   });
 

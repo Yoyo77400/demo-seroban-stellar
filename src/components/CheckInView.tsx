@@ -1,10 +1,12 @@
 import { useState, type FormEvent } from "react";
 import { CONTRACT_ID, EXPLORER_URL, NAME_MAX_LENGTH } from "../config";
-import { describeError, shortenAddress, validateName } from "../lib/checkin";
+import { describeError, shortenAddress, validateAmount, validateName } from "../lib/checkin";
 import { checkIn } from "../lib/contract";
+import { sendXlm } from "../lib/payment";
 import { connectWallet, disconnectWallet, fundWithFriendbot, signTransaction } from "../lib/wallet";
 import { useAttendees } from "../hooks/useAttendees";
 import { AttendeeList } from "./AttendeeList";
+import { SendXlmForm } from "./SendXlmForm";
 
 type Status =
   | { kind: "idle" }
@@ -67,6 +69,18 @@ export function CheckInView() {
     });
   };
 
+  const onSend = (account: string, destination: string, rawAmount: string) => {
+    const validation = validateAmount(rawAmount);
+    if (!validation.ok) {
+      setStatus({ kind: "error", message: validation.reason });
+      return;
+    }
+    void run("Signe la transaction dans ton wallet…", async () => {
+      const hash = await sendXlm(account, destination, validation.amount, signTransaction);
+      setStatus({ kind: "success", hash });
+    });
+  };
+
   return (
     <main className="layout">
       <section className="card">
@@ -114,6 +128,12 @@ export function CheckInView() {
             <button className="link" onClick={() => void onFund(address)} disabled={busy}>
               Obtenir des XLM de test (nouveau wallet)
             </button>
+
+            <SendXlmForm
+              recipients={attendees.filter((a) => a.address !== address)}
+              disabled={busy}
+              onSend={(destination, amount) => onSend(address, destination, amount)}
+            />
           </>
         )}
 
